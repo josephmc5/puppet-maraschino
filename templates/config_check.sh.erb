@@ -1,0 +1,2 @@
+#!/bin/bash
+sqlite3 <%= data_dir %>/maraschino.db "select * from settings where key = 'active_server' AND value = '1';"
