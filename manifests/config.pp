@@ -1,4 +1,19 @@
 class maraschino::config {
+    if $logrotate {
+        logrotate::rule { 'maraschino':
+            path          => "$log_dir/*",
+            rotate        => 5,
+            size          => '100k',
+            sharedscripts => true,
+            postrotate    => '/usr/bin/supervisorctl restart maraschino',
+        }   
+    }
+    file { "$log_dir":
+        ensure => directory,
+        owner => 'maraschino',
+        group => 'maraschino',
+        mode => '0644',
+    }
     package { 'sqlite3':
         ensure  => present,
     }
@@ -26,12 +41,5 @@ class maraschino::config {
         unless      => "$base_dir/maraschino/config_check.sh",
         path        => '/usr/bin',
         require     => [Package['sqlite3'],File['sqlite3-check']],
-    }
-    
-    file { "$log_dir":
-        ensure => directory,
-        owner => 'maraschino',
-        group => 'maraschino',
-        mode => '0644',
     }
 }
