@@ -10,8 +10,8 @@ class maraschino::config {
     }
     file { "$log_dir":
         ensure => directory,
-        owner => 'maraschino',
-        group => 'maraschino',
+        owner => "$services_user",
+        group => "$services_user",
         mode => '0644',
     }
     package { 'sqlite3':
@@ -19,21 +19,21 @@ class maraschino::config {
     }
     file { "$base_dir/maraschino/data/":
         ensure => directory,
-        owner => 'maraschino',
-        group => 'maraschino',
+        owner => "$services_user",
+        group => "$services_user",
     }
     file { "$base_dir/maraschino/config.sh":
         content => template('maraschino/config.sh.erb'),
-        owner => 'maraschino',
-        group => 'maraschino',
+        owner => "$services_user",
+        group => "$services_user",
         mode => '0755',
         notify => Exec['sqlite3-config'],
     }
     file { 'sqlite3-check':
         content => template('maraschino/config_check.sh.erb'),
         path    => "$base_dir/maraschino/config_check.sh",
-        owner => 'maraschino',
-        group => 'maraschino',
+        owner => "$services_user",
+        group => "$services_user",
         mode => '0755',
     }
     exec { 'sqlite3-config':

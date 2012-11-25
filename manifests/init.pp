@@ -5,18 +5,15 @@ class maraschino inherits maraschino::params {
     include python::virtualenv
     include supervisor
 	
-	user { 'maraschino':
-        allowdupe => false,
-        ensure => 'present',
-        shell => '/bin/bash',
-        home => "$base_dir/maraschino",
-        password => '*',
-    }
+#	user { "$services_user":
+#        allowdupe => false,
+#        ensure => 'present',
+#    }
 
     file { "$base_dir/maraschino":
         ensure => directory,
-        owner => 'maraschino',
-        group => 'maraschino',
+        owner => "$services_user",
+        group => "$services_user",
         mode => '0644',
     }
     exec { 'venv-create-maraschino':
@@ -39,8 +36,8 @@ class maraschino inherits maraschino::params {
             stdout_logfile => "$base_dir/maraschino/log/supervisor.log",
             stderr_logfile => "$base_dir/maraschino/log/supervisor.log",
             command => "$base_dir/maraschino/venv/bin/python $base_dir/maraschino/src/Maraschino.py --datadir $base_dir/maraschino/data --webroot $maraschino_webroot -p $maraschino_port --log $base_dir/maraschino/log/maraschino.log",
-            user => 'maraschino',
-            group => 'maraschino',
+            user => "$services_user",
+            group => "$services_user",
             directory => "$base_dir/maraschino/src/",
             require => Exec['download-maraschino'],
     }

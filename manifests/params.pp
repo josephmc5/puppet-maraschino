@@ -28,6 +28,7 @@ class maraschino::params (
     $logrotate = hiera("logrotate", "false"),
 )
 {
+    $services_user = hiera("services_user")
     $log_dir = "$base_dir/maraschino/log"
     $data_dir = "$base_dir/maraschino/data"
     $cache_dir = "$base_dir/maraschino/cache"
